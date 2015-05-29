@@ -20,7 +20,7 @@ sudo socat TCP-LISTEN:12000,reuseaddr,fork UNIX-CLIENT:/tmp/TelldusClient &
 
 
 
-### Some basic examples
+## Some basic examples
 This assumes that the Tellstick Duo has been properly configurated as described here [http://developer.telldus.com/wiki/TellStick_conf]
 
 
@@ -38,7 +38,7 @@ This assumes that the Tellstick Duo has been properly configurated as described 
            })
 ```
 
-
+### Turn a device on or off
 ```clojure
 
 ;; Turn on device 100
@@ -48,6 +48,31 @@ This assumes that the Tellstick Duo has been properly configurated as described 
 ;; Turn off device 100
 (telldus/telldus conn "tdTurnOff" 100)
 
+```
+
+### Misc operations
+```clojure
+;; get the serial id from the device
+(telldus/telldus conn "tdControllerValue"  1 "serial")
+
+;; get the firmware revison from the interface device
+(telldus/telldus conn "tdControllerValue"  1 "firmware")
+
+```
+
+
+### Print configurated devices
+```clojure
+
+;; get a list of configurated devices
+(doseq [i (range (telldus/get-num-devices conn))]
+  (let [dev-id (val (telldus/telldus conn "tdGetDeviceId" i))
+        name (telldus/telldus conn "tdGetName" dev-id)
+        model (telldus/telldus conn "tdGetModel" dev-id)]
+
+    (println "id:" dev-id "  " name "  model:" model)
+    )
+)
 ```
 
 

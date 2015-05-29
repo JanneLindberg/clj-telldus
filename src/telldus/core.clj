@@ -1,5 +1,6 @@
 (ns telldus.core
-  (:require [clojure.java.io :as io])
+  (:require [clojure.java.io :as io]
+            [clojure.string :as s])
   (:import
    (java.net Socket)
    (java.io PrintWriter InputStreamReader BufferedReader)
@@ -18,7 +19,7 @@
     (.append writer (str req))
     (.flush writer)
     (io/copy reader response)
-    (str response)))
+    (s/trim-newline (str response))))
 
 
 (defn- telldus-arg
@@ -54,3 +55,13 @@
   ([conn cmd arg arg2]
    (send-request (:host conn) (:client-port conn) (telldus-cmd cmd arg arg2)))
   )
+
+
+(defn ival [res]
+  (Integer. (re-find #"\d+" res)))
+
+(defn- get-num-devices
+  "Get the number of defined devices"
+  [conn]
+  (ival (telldus conn "tdGetNumberOfDevices")))
+

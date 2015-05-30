@@ -58,7 +58,6 @@
       )))
 
 
-
 (defn telldus
   ([conn cmd]
    (send-cmd conn (telldus-cmd cmd)))
@@ -73,3 +72,23 @@
   "Get the number of defined devices"
   [conn]
   (telldus conn "tdGetNumberOfDevices"))
+
+
+(defn get-device-info
+  "Get info on the device specified by the id"
+  [conn id]
+  (let [name (telldus/telldus conn "tdGetName" id)
+        model (telldus/telldus conn "tdGetModel" id)
+        last-command (telldus/telldus conn "tdLastSentCommand" id 255)]
+    {:id id :name name :model model :command last-command}
+    ))
+
+
+(defn get-all-device-info
+  "List of all configurated devices"
+  [conn]
+  (let [arr (atom []) ]
+    (doseq [i (range (Integer. (telldus/get-num-devices conn)))]
+      (let [id (Integer. (telldus/telldus conn "tdGetDeviceId" i))]
+        (swap! arr conj (get-device-info conn id))))
+    @arr))

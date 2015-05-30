@@ -63,10 +63,9 @@ This assumes that the Tellstick Duo has been properly configurated as described 
 
 ### Print configurated devices
 ```clojure
-
 ;; get a list of configurated devices
-(doseq [i (range (telldus/get-num-devices conn))]
-  (let [dev-id (val (telldus/telldus conn "tdGetDeviceId" i))
+(doseq [i (range (Integer. (telldus/get-num-devices conn)))]
+  (let [dev-id (Integer. (telldus/telldus conn "tdGetDeviceId" i))
         name (telldus/telldus conn "tdGetName" dev-id)
         model (telldus/telldus conn "tdGetModel" dev-id)]
 

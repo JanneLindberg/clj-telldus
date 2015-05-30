@@ -50,12 +50,7 @@
 (defn send-cmd
   "Send command and return the response code or string depending on the format"
   [conn cmd-str]
-  (println "------------------------------")
-  (println "cmd:" cmd-str)
   (let [resp (send-request (:host conn) (:client-port conn) cmd-str)]
-
-    (println "resp:" resp)
-
     ;; i<num>s or "<len>:<string>"
     (if (.startsWith resp "i")
       (last (re-find #"i([0-9-]+)s" resp))

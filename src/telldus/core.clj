@@ -10,7 +10,7 @@
 
 
 (defn send-request
-  "Sends an request to the specified host and port"
+  "Sends an request to the specified host and port, returns the response"
   [host port req]
   (with-open [sock (Socket. host port)
               writer (io/writer sock)
@@ -47,21 +47,34 @@
         )))
 
 
+(defn send-cmd
+  "Send command and return the response code or string depending on the format"
+  [conn cmd-str]
+  (println "------------------------------")
+  (println "cmd:" cmd-str)
+  (let [resp (send-request (:host conn) (:client-port conn) cmd-str)]
+
+    (println "resp:" resp)
+
+    ;; i<num>s or "<len>:<string>"
+    (if (.startsWith resp "i")
+      (last (re-find #"i([0-9-]+)s" resp))
+      (last (re-find #"(\d+):(.*)" resp))
+      )))
+
+
+
 (defn telldus
   ([conn cmd]
-   (send-request (:host conn) (:client-port conn) (telldus-cmd cmd)))
+   (send-cmd conn (telldus-cmd cmd)))
   ([conn cmd arg]
-   (send-request (:host conn) (:client-port conn) (telldus-cmd cmd arg)))
+   (send-cmd conn (telldus-cmd cmd arg)))
   ([conn cmd arg arg2]
-   (send-request (:host conn) (:client-port conn) (telldus-cmd cmd arg arg2)))
+   (send-cmd conn (telldus-cmd cmd arg arg2)))
   )
 
 
-(defn ival [res]
-  (Integer. (re-find #"\d+" res)))
-
-(defn- get-num-devices
+(defn get-num-devices
   "Get the number of defined devices"
   [conn]
-  (ival (telldus conn "tdGetNumberOfDevices")))
-
+  (telldus conn "tdGetNumberOfDevices"))

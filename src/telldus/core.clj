@@ -77,9 +77,9 @@
 (defn get-device-info
   "Get info on the device specified by the id"
   [conn id]
-  (let [name (telldus/telldus conn "tdGetName" id)
-        model (telldus/telldus conn "tdGetModel" id)
-        last-command (telldus/telldus conn "tdLastSentCommand" id 255)]
+  (let [name (telldus conn "tdGetName" id)
+        model (telldus conn "tdGetModel" id)
+        last-command (telldus conn "tdLastSentCommand" id 255)]
     {:id id :name name :model model :command last-command}
     ))
 
@@ -88,7 +88,7 @@
   "List of all configurated devices"
   [conn]
   (let [arr (atom []) ]
-    (doseq [i (range (Integer. (telldus/get-num-devices conn)))]
-      (let [id (Integer. (telldus/telldus conn "tdGetDeviceId" i))]
+    (doseq [i (range (Integer. (get-num-devices conn)))]
+      (let [id (Integer. (telldus conn "tdGetDeviceId" i))]
         (swap! arr conj (get-device-info conn id))))
     @arr))

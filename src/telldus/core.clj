@@ -92,3 +92,43 @@
       (let [id (Integer. (telldus conn "tdGetDeviceId" i))]
         (swap! arr conj (get-device-info conn id))))
     @arr))
+
+
+
+(def
+  ^{:private true
+   :doc "Device methods"
+    }
+  device-methods {
+                  :TELLSTICK_TURNON    1
+                  :TELLSTICK_TURNOFF   2
+                  :TELLSTICK_BELL      4
+                  :TELLSTICK_TOGGLE    8
+                  :TELLSTICK_DIM       16
+                  :TELLSTICK_LEARN     32
+                  :TELLSTICK_EXECUTE   64
+                  :TELLSTICK_UP        128
+                  :TELLSTICK_DOWN      256
+                  :TELLSTICK_STOP      512
+                  })
+
+
+(defn methods-supported->int
+  "Convert a list of device methods keywords into the an integer value"
+  [& args]
+  (apply + (map #(%1 device-methods) args )))
+
+
+(defmulti device-method-value->map
+  "Convert a device method value into the map representation"
+  class)
+
+(defmethod device-method-value->map Integer [arg]
+  (filter #(not (zero? (bit-and arg (val %1)))) device-methods))
+
+(defmethod device-method-value->map Long [arg]
+  (device-method-value->map (Integer. arg)))
+
+(defmethod device-method-value->map String [arg]
+  (device-method-value->map (Integer. arg)))
+

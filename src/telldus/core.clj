@@ -132,3 +132,14 @@
 (defmethod device-method-value->map String [arg]
   (device-method-value->map (Integer. arg)))
 
+
+(defn turn-on
+  "Turn on an device"
+  [conn device-id]
+  (telldus conn "tdTurnOn" device-id))
+
+(defn turn-off
+  "Turn on an device"
+  [conn device-id]
+  (telldus conn "tdTurnOff" device-id))
+

@@ -133,13 +133,42 @@
   (device-method-value->map (Integer. arg)))
 
 
+;;
+;; Error codes
+;;
+(defmulti error-code
+  "Convert a numeric error code to a string representation"
+  class)
+
+(defmethod error-code String [code]
+  (error-code (Long. code)))
+
+(defmethod error-code Long [code]
+  (let [error-codes {
+                     0 "SUCCESS"
+                     -1 "ERROR_NOT_FOUND"
+                     -2 "ERROR_PERMISSION_DENIED"
+                     -3 "ERROR_DEVICE_NOT_FOUND"
+                     -4 "ERROR_METHOD_NOT_SUPPORTED"
+                     -5 "ERROR_COMMUNICATION"
+                     -6 "ERROR_CONNECTING_SERVICE"
+                     -7 "ERROR_UNKNOWN_RESPONSE"
+                     -8 "ERROR_SYNTAX"
+                     -9 "ERROR_BROKEN_PIPE"
+                    -10 "ERROR_COMMUNICATING_SERVICE"
+                    -11 "ERROR_CONFIG_SYNTAX"
+                    -99 "ERROR_UNKNOWN"}]
+    (error-codes code)))
+
+
+
 (defn turn-on
   "Turn on an device"
   [conn device-id]
   (telldus conn "tdTurnOn" device-id))
 
 (defn turn-off
-  "Turn on an device"
+  "Turn off an device"
   [conn device-id]
   (telldus conn "tdTurnOff" device-id))
 

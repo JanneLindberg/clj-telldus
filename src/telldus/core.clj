@@ -96,9 +96,7 @@
 
 
 (def
-  ^{:private true
-   :doc "Device methods"
-    }
+  ^{:doc "Device methods" }
   device-methods {
                   :TELLSTICK_TURNON    1
                   :TELLSTICK_TURNOFF   2

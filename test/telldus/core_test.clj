@@ -24,3 +24,19 @@
 
 
 
+(deftest test-device-mapping
+  (testing "methods to int"
+    (is (= 1 (methods-supported->int :TELLSTICK_TURNON)))
+    (is (= 2 (methods-supported->int :TELLSTICK_TURNOFF)))
+    (is (= 3 (methods-supported->int :TELLSTICK_TURNON :TELLSTICK_TURNOFF)))
+
+    )
+
+  (testing "with string argument"
+
+    (is (= 8 (count (device-method-value->map "255"))) "Expected all entries")
+
+    )
+)
+
+

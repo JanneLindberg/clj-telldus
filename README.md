@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/JanneLindberg/clj-telldus.svg?branch=master)](https://travis-ci.org/JanneLindberg/clj-telldus)
+
 # clj-telldus
 Clojure library to communicate with the telldusd daemon
 

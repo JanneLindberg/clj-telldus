@@ -15,7 +15,7 @@ UNIX socket as TCP sockets.
 sudo telldusd --debug --nodaemon &
 
 sudo socat TCP-LISTEN:12000,reuseaddr,fork UNIX-CLIENT:/tmp/TelldusClient &
-# sudo socat TCP-LISTEN:12001,reuseaddr,fork UNIX-CLIENT:/tmp/TelldusEvents &
+sudo socat TCP-LISTEN:12001,reuseaddr,fork UNIX-CLIENT:/tmp/TelldusEvents &
 ```
 
 
@@ -23,6 +23,7 @@ sudo socat TCP-LISTEN:12000,reuseaddr,fork UNIX-CLIENT:/tmp/TelldusClient &
 ## Some basic examples
 This assumes that the Tellstick Duo has been properly configurated as described here [http://developer.telldus.com/wiki/TellStick_conf]
 
+### Device commands
 
 ```clojure
 (use '[telldus.core :as telldus])
@@ -30,7 +31,6 @@ This assumes that the Tellstick Duo has been properly configurated as described 
 
 
 ```clojure
-;; 
 (def conn {
            :host "HOSTIP"
            :client-port 12000
@@ -38,7 +38,8 @@ This assumes that the Tellstick Duo has been properly configurated as described 
            })
 ```
 
-### Turn a device on or off
+
+#### Turn a device on or off
 ```clojure
 
 ;; Turn on device 100
@@ -49,6 +50,31 @@ This assumes that the Tellstick Duo has been properly configurated as described 
 (telldus/telldus conn "tdTurnOff" 100)
 
 ```
+
+### Event listener
+Below is an example how to configure and start the event-listener, the handler in this example
+simply prints the response message map.
+
+```clojure
+(ns telldus.test
+  (:require [telldus.core :as telldus])
+  (:use [telldus.event :as event :only [event-listener get-response-message]]))
+
+
+(defn message-handler [event-message]
+  (println (event/get-response-message event-message)))
+
+(def conn {
+           :host "<HOSTIP>"
+           :client-port 12000
+           :event-port 12001
+           :handler message-handler
+           })
+;;
+(future (event/event-listener conn))
+
+```
+
 
 ### Misc operations
 ```clojure

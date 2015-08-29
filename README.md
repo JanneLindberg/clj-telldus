@@ -1,11 +1,9 @@
+# clj-telldus
 [![Build Status](https://travis-ci.org/JanneLindberg/clj-telldus.svg?branch=master)](https://travis-ci.org/JanneLindberg/clj-telldus)
 
-# clj-telldus
-Clojure library to communicate with the telldusd daemon
+This is an initial, experimental implementation to communicate with Telldus Tellstick Duo interface using the telldusd daemon
 
 ## Usage
-This is an initial, experimental implementation that currently only supports sending commands to a Tellstick Duo interface.
-No support for listening to any events from the interface has been implemented so far.
 
 ###
 Start the telldus daemon with the script below, or in a similar way. This script starts the telldus daemon and publish the

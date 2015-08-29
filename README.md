@@ -23,7 +23,7 @@ sudo socat TCP-LISTEN:12001,reuseaddr,fork UNIX-CLIENT:/tmp/TelldusEvents &
 ## Some basic examples
 This assumes that the Tellstick Duo has been properly configurated as described here [http://developer.telldus.com/wiki/TellStick_conf]
 
-### Controllong device
+### Device commands
 
 ```clojure
 (use '[telldus.core :as telldus])
